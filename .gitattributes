@@ -4,3 +4,4 @@ web/* linguist-vendored
 # Ignore generated files
 *.g.dart linguist-generated
 *.freezed.dart linguist-generated
+*.html linguist-vendored
