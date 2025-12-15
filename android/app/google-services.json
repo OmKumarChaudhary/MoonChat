@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "39168642996",
+    "project_id": "moonchat-6ba9a",
+    "storage_bucket": "moonchat-6ba9a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39168642996:android:5c1cc208ee63c556296ce1",
+        "android_client_info": {
+          "package_name": "com.example.moonchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApsFVsSWUUzSwRWDunaupBMFwwInveWUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
