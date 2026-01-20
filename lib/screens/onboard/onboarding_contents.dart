@@ -13,18 +13,18 @@ class OnboardingContents {
 List<OnboardingContents> contents = [
   OnboardingContents(
     title: "Welcome to MoonChat",
-    image: "assets/images/image1.png",
+    image: "images/icon.png",
     desc: "Connect with your universe through secure, fun, and personalized messaging.",
   ),
   OnboardingContents(
     title: "Stay Connected to the market",
-    image: "assets/images/image2.png",
+    image: "images/icon.png",
     desc:
-    "",
+    "Get real-time updates and stay ahead of the curve.",
   ),
   OnboardingContents(
     title: "Get notified when work happens",
-    image: "assets/images/image3.png",
+    image: "images/icon.png",
     desc:
     "Take control of notifications, collaborate live or on your own time.",
   ),

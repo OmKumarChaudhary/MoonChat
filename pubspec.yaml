@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
   flutter_login: ^5.1.0
   firebase_core: ^3.15.1
@@ -19,6 +18,12 @@ dependencies:
   firebase_storage: ^12.4.9
   get: ^4.7.2
   cloud_firestore: ^5.6.12
+  concentric_transition: ^1.0.3
+  intl: ^0.20.2
+  google_sign_in: ^6.2.1
+  image_picker: ^1.0.7
+  emoji_picker_flutter: ^3.0.0
+  photo_view: ^0.15.0
 
 dev_dependencies:
   flutter_test:

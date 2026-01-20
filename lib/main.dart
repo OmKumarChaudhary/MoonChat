@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:moonchat/screens/onboard/onboarding_screen.dart';
+import 'package:moonchat/screens/auth/login_screen.dart';
+import 'package:moonchat/screens/auth/signup_screen.dart';
 import 'package:moonchat/screens/home_screen.dart';
 import 'firebase_options.dart';
 
@@ -12,20 +15,32 @@ void main() async {
 
   runApp(const MyApp());
 }
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MoonChat',
       theme: ThemeData(
+        fontFamily: 'Mulish',
         primarySwatch: Colors.red,
+        scaffoldBackgroundColor: const Color(0xFF151522),
       ),
-      home: HomeScreen(),
+      home: const OnboardingScreen(),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
+        '/home': (context) => const HomeScreen(),
+      },
     );
   }
 }
-
