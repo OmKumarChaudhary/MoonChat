@@ -1,5 +1,13 @@
 # Today's Task Update
 
+
+## 📅 Date
+
+- January 20
+
+- Authentication
+- Onboarding Page Enhance UI
+
 ## 📅 Date
 
 - December 15
