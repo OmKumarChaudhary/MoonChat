@@ -1,5 +1,11 @@
 # Today's Task Update
 
+## 📅 Date
+
+- January 24
+
+- Lottie animation intergated
+- UI Enhancemnet
 
 ## 📅 Date
 

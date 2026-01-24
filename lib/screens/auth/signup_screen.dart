@@ -134,26 +134,35 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF151522),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
                GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: const Icon(Icons.arrow_back, color: Colors.white),
               ),
-              const SizedBox(height: 20),
-              const Center(
-                child: Text(
-                  'MoonChat',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: 'Mulish',
-                  ),
+              const SizedBox(height: 10),
+              Center(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'images/transicon.png', 
+                      height: 60,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'MoonChat',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Mulish',
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 8),
@@ -161,13 +170,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Text(
                   'Create your account',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.white70,
                     fontFamily: 'Mulish',
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               
                // Name Field (Optional here if moving to profile setup, but standard to ask name first sometimes. 
                // Request implies profile setup has "Full Name", so maybe we can remove it here or keep it. 
@@ -201,7 +210,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
               // Password Field
               const Text(
@@ -243,7 +252,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               
               // Sign Up Button
               SizedBox(
@@ -288,7 +297,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
               
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               
               // Social Login Buttons
                _buildSocialButton(
@@ -297,7 +306,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 onPressed: _isLoading ? () {} : _signInWithGoogle,
               ),
               
-               const SizedBox(height: 30),
+               const SizedBox(height: 20),
                
                Row(
                  mainAxisAlignment: MainAxisAlignment.center,
@@ -320,7 +329,6 @@ class _SignupScreenState extends State<SignupScreen> {
                    ),
                  ],
                ),
-               const SizedBox(height: 20),
             ],
           ),
         ),

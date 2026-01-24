@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'onboarding_contents.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _startAutoPlay() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 6), (timer) {
       if (_currentPage < contents.length - 1) {
         _currentPage++;
       } else {
@@ -57,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Radius.circular(50),
         ),
         color: _currentPage == index 
-            ? const Color(0xFF4A1CFA) // Active dot color (Purple)
+            ? const Color(0xFF7041EE) // Active dot color (Purple)
             : const Color(0xFF383838), // Inactive dot color (Dark Grey)
       ),
       margin: const EdgeInsets.only(right: 5),
@@ -70,7 +71,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: const Color(0xFF151522), // Dark background
@@ -100,10 +100,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             flex: 5,
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 20.0),
-                              child: Image.asset(
-                                contents[i].image,
-                                fit: BoxFit.contain,
-                              ),
+                              child: contents[i].image.endsWith('.json')
+                                  ? Lottie.asset(
+                                      contents[i].image,
+                                      fit: BoxFit.contain,
+                                    )
+                                  : Image.asset(
+                                      contents[i].image,
+                                      fit: BoxFit.contain,
+                                    ),
                             ),
                           ),
                           
@@ -178,7 +183,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           Navigator.pushNamed(context, '/signup');
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4A1CFA), // Primary color
+                          backgroundColor: const Color(0xFF7041EE), // Primary color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16), // Rounded corners
                           ),

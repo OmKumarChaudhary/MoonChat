@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
+
     setState(() {
       _isLoading = true;
     });
@@ -119,22 +120,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF151522),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
                GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: const Icon(Icons.arrow_back, color: Colors.white),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Center(
                 child: Column(
                   children: [
                     Image.asset(
-                      'images/icon.png', 
+                      'images/transicon.png', 
                       height: 60,
                     ),
                     const SizedBox(height: 16),
@@ -159,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               
               // Email Field
               const Text(
@@ -188,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
               // Password Field
               const Text(
@@ -241,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               
               // Login Button
               SizedBox(
@@ -286,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               
               // Social Login Buttons
                _buildSocialButton(
@@ -295,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _isLoading ? () {} : _signInWithGoogle,
               ),
               
-               const SizedBox(height: 30),
+               const SizedBox(height: 20),
                
                Row(
                  mainAxisAlignment: MainAxisAlignment.center,
@@ -318,7 +319,6 @@ class _LoginScreenState extends State<LoginScreen> {
                    ),
                  ],
                ),
-               const SizedBox(height: 20),
             ],
           ),
         ),
