@@ -1,5 +1,13 @@
 # Today's Task Update
 
+## 📅 Date
+
+- January 27
+
+- Home Screen Dashboard
+- Bottom Navigation Bar
+- Profile Screens (Accounte Setting, linked account, profile, profile setup,)
+- Models(User Models Authentication and Login, Logout and CRUD profile setup)
 
 ## 📅 Date
 
