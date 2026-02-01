@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:moonchat/models/user_model.dart';
+import 'package:moonchat/screens/chat/chat_screen.dart';
 import 'package:moonchat/screens/profile/profile_screen.dart';
+import 'package:moonchat/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     const ChatListScreen(),
-    const Center(child: Text("Crypto Track", style: TextStyle(color: Colors.white))),
     const ProfileScreen(),
   ];
 
@@ -71,6 +73,7 @@ class ChatListScreen extends StatefulWidget {
 }
 
 class _ChatListScreenState extends State<ChatListScreen> {
+  final ChatService _chatService = ChatService();
   final TextEditingController _searchController = TextEditingController();
   List<UserModel> _searchResults = [];
   bool _isSearching = false;
@@ -88,7 +91,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
       _isSearching = true;
     });
 
-    
+    final results = await _chatService.searchUsers(query);
+    setState(() {
+      _searchResults = results;
+    });
   }
 
   @override
@@ -131,7 +137,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
             ),
             const SizedBox(height: 20),
 
-            
+            // Search Results or Chat List
+            Expanded(
+              child: _searchController.text.isNotEmpty 
+                ? _buildSearchResults()
+                : _buildChatList(),
+            ),
         ],
       ),
     );
@@ -151,7 +162,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
         final user = _searchResults[index];
         return ListTile(
           onTap: () {
-            
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(receiver: user),
+              ),
+            );
           },
           leading: CircleAvatar(
             backgroundImage: user.profileImage != null
@@ -171,7 +187,94 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return fullName.split(' ').first;
   }
 
+  Widget _buildChatList() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _chatService.getChatRooms(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+        
+        return ListView(
+          children: [
+             // Fixed Group Chat Item
+             _buildChatItem(
+               name: "MonCchat Group",
+               message: "Join the community talk!",
+               time: "",
+               unreadCount: 0,
+               color: const Color(0xFF7041EE),
+               image: null,
+               isOnline: true,
+               onTap: () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      receiver: UserModel(uid: 'public_group', fullName: 'MonCchat Group', username: 'group', email: ''),
+                      isGroup: true,
+                      groupId: 'monchat_public',
+                    ),
+                  ),
+                );
+               }
+             ),
+             
+             ...snapshot.data!.docs.map((doc) {
+               final data = doc.data() as Map<String, dynamic>;
+               final users = List<String>.from(data['users'] ?? []);
+               if (users.isEmpty) return const SizedBox.shrink();
+               
+               final otherUserId = users.firstWhere((uid) => uid != _chatService.currentUserId, orElse: () => '');
+               if (otherUserId.isEmpty) return const SizedBox.shrink();
 
+               final int unreadCount = data['unreadCount_${_chatService.currentUserId}'] ?? 0;
+               final bool isMe = data['lastSenderId'] == _chatService.currentUserId;
+               final String displayMessage = isMe ? "You: ${data['lastMessage'] ?? ''}" : (data['lastMessage'] ?? '');
+               
+               return StreamBuilder<DocumentSnapshot>(
+                 stream: _chatService.getUserStream(otherUserId),
+                 builder: (context, userSnapshot) {
+                   if (!userSnapshot.hasData) return const SizedBox.shrink();
+                   final user = UserModel.fromMap(userSnapshot.data!.data() as Map<String, dynamic>);
+                   
+                   return _buildChatItem(
+                      name: user.fullName,
+                      message: displayMessage,
+                      time: data['lastMessageTime'] != null 
+                        ? DateFormat('h:mm a').format((data['lastMessageTime'] as Timestamp).toDate())
+                        : '',
+                      unreadCount: unreadCount,
+                      color: Colors.blueAccent,
+                      image: user.profileImage,
+                      isOnline: user.isOnline,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(receiver: user),
+                          ),
+                        );
+                      }
+                    );
+                 },
+               );
+             }).toList()
+          ],
+        );
+      }
+    );
+  }
 
   Widget _buildChatItem({
     required String name,
