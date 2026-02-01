@@ -2,7 +2,7 @@
 
 ## 📅 Date
 
-- February
+- February 1
 
 - Chat Screen 
 - User Search 
