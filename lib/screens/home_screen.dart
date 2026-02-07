@@ -7,6 +7,7 @@ import 'package:moonchat/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
+import 'package:moonchat/screens/crypto/crypto_track_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     const ChatListScreen(),
+    const CryptoTrackScreen(),
     const ProfileScreen(),
   ];
 
@@ -191,6 +193,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return StreamBuilder<QuerySnapshot>(
       stream: _chatService.getChatRooms(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (snapshot.hasError) {
           return Center(
             child: Padding(
@@ -203,7 +208,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
             ),
           );
         }
-        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
         
         return ListView(
           children: [
