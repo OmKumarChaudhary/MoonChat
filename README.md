@@ -2,6 +2,17 @@
 
 ## 📅 Date
 
+- February 7
+
+- backend (Coingecko Library for crypto data)
+- Cryto Track screen
+- Crypto Search 
+- Crypto model
+- Crypto Services for API
+
+
+## 📅 Date
+
 - February 1
 
 - Chat Screen 
