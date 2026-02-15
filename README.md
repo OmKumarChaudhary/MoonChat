@@ -1,5 +1,10 @@
 # Today's Task Update
+## 📅 Date
 
+- February 15
+
+- Chatbot(AI Assistant)
+- Library(Numpy, Pandas, nltk, scikit-learn, flask, pyttsx3)
 
 ## 📅 Date
 
