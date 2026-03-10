@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from routes.crypto import crypto_bp
+from routes.chatbot_route import chatbot_bp
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -12,6 +13,9 @@ CORS(app)
 # Register blueprints for modular routing
 # All crypto-related routes will be prefixed with /api/crypto
 app.register_blueprint(crypto_bp, url_prefix='/api/crypto')
+
+# All chatbot-related routes will be prefixed with /api/chatbot
+app.register_blueprint(chatbot_bp, url_prefix='/api/chatbot')
 
 @app.route('/')
 def home():

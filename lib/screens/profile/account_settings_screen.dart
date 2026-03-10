@@ -216,6 +216,15 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                      _buildDateField("Date of Birth", _dobController),
                      const SizedBox(height: 20),
                      _buildGenderDropdown(),
+                     const SizedBox(height: 32),
+                     const Divider(color: Colors.white24),
+                     const SizedBox(height: 16),
+                     const Text(
+                       "Security",
+                       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                     ),
+                     const SizedBox(height: 16),
+                     _buildChangePasswordButton(),
                   ],
                 ),
               ),
@@ -310,6 +319,41 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           onChanged: (val) => setState(() => _selectedGender = val),
         ),
       ],
+    );
+  }
+
+  Widget _buildChangePasswordButton() {
+    return Container(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: () async {
+          if (user?.email != null) {
+            try {
+              await FirebaseAuth.instance.sendPasswordResetEmail(email: user!.email!);
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Password reset email sent!')),
+                );
+              }
+            } catch (e) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
+              }
+            }
+          }
+        },
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFF7041EE)),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: const Text(
+          "Change Password",
+          style: TextStyle(color: Color(0xFF7041EE), fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 }

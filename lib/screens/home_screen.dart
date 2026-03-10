@@ -63,6 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/ai_assistant'),
+        backgroundColor: const Color(0xFF7041EE),
+        child: const Icon(Icons.smart_toy, color: Colors.white),
+      ),
     );
   }
 }
@@ -213,7 +218,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           children: [
              // Fixed Group Chat Item
              _buildChatItem(
-               name: "MonCchat Group",
+               name: "MoonChat Group",
                message: "Join the community talk!",
                time: "",
                unreadCount: 0,
@@ -225,9 +230,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ChatScreen(
-                      receiver: UserModel(uid: 'public_group', fullName: 'MonCchat Group', username: 'group', email: ''),
+                      receiver: UserModel(uid: 'public_group', fullName: 'MoonChat Group', username: 'group', email: ''),
                       isGroup: true,
-                      groupId: 'monchat_public',
+                      groupId: 'moonchat_public',
                     ),
                   ),
                 );

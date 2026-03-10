@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:moonchat/screens/onboard/onboarding_screen.dart';
 import 'package:moonchat/screens/auth/login_screen.dart';
 import 'package:moonchat/screens/auth/signup_screen.dart';
+import 'package:moonchat/screens/auth/forgot_password_screen.dart';
+import 'package:moonchat/screens/chat/ai_assistant_screen.dart';
 import 'package:moonchat/screens/profile/profile_setup_screen.dart';
 import 'package:moonchat/screens/home_screen.dart';
 import 'package:moonchat/screens/profile/account_settings_screen.dart';
@@ -73,6 +75,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
+        '/forgot_password': (context) => const ForgotPasswordScreen(),
+        '/ai_assistant': (context) => const AIAssistantScreen(),
         '/profile_setup': (context) => const ProfileSetupScreen(),
         '/home': (context) => const HomeScreen(),
         '/account_settings': (context) => const AccountSettingsScreen(),

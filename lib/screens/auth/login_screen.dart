@@ -234,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(context, '/forgot_password'),
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(color: Color(0xFF7041EE)),
@@ -276,25 +276,25 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 30),
               
               // Divider
-              Row(
-                children: const [
-                  Expanded(child: Divider(color: Colors.grey)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('or', style: TextStyle(color: Colors.grey)),
-                  ),
-                  Expanded(child: Divider(color: Colors.grey)),
-                ],
-              ),
+              // Row(
+              //   children: const [
+              //     Expanded(child: Divider(color: Colors.grey)),
+              //     Padding(
+              //       padding: EdgeInsets.symmetric(horizontal: 16),
+              //       child: Text('or', style: TextStyle(color: Colors.grey)),
+              //     ),
+              //     Expanded(child: Divider(color: Colors.grey)),
+              //   ],
+              // ),
               
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               
               // Social Login Buttons
-               _buildSocialButton(
-                icon: Icons.g_mobiledata, // Placeholder for Google Icon
-                text: 'Continue with Google',
-                onPressed: _isLoading ? () {} : _signInWithGoogle,
-              ),
+              //  _buildSocialButton(
+              //   icon: Icons.g_mobiledata, // Placeholder for Google Icon
+              //   text: 'Continue with Google',
+              //   onPressed: _isLoading ? () {} : _signInWithGoogle,
+              // ),
               
                const SizedBox(height: 20),
                
