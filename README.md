@@ -7,7 +7,7 @@ MoonChat is a modern, AI-powered social and financial application designed for t
 ## 🚀 Key Features
 
 - **Real-time Messaging:** Secure and fast communication using Firebase Firestore.
-- **Crypto Track:** Monitor real-time cryptocurrency prices, market caps, and 24h changes powered by the CoinGecko API.
+- **Crypto Track:** Monitor real-time cryptocurrency prices, market caps, and 24h changes powered by the CoinGecko Library.
 - **AI Chatbot Assistant:** An integrated AI assistant to help users navigate the app and get quick information.
 - **Authentication:** robust signup/login system with Google Sign-In support.
 - **Password Recovery:** Seamless "Forgot Password" and internal "Change Password" flows via Firebase Auth.
@@ -27,7 +27,7 @@ MoonChat is a modern, AI-powered social and financial application designed for t
 ### Backend
 > **Note:** The backend has been migrated to a new, standalone repository.
 - **Framework:** Flask (Python)
-- **APIs:** CoinGecko API for Crypto Data
+- **APIs:** CoinGecko Library for Crypto Data
 - **AI/ML:** TensorFlow, NLTK, NumPy, Pandas (for Chatbot logic)
 
 ---
@@ -91,7 +91,7 @@ MoonChat is a modern, AI-powered social and financial application designed for t
 - **Notifications:** Integrated Firebase Cloud Messaging for robust, customizable push notifications.
 - **Settings & Privacy:** Built comprehensive Settings and Privacy UI screens.
 - **Performance & Bug Fixes:** Resolved chat screen performance issues (lagging and minor visual bugs), and fixed mobile data loading issues on physical devices.
-- **AI Chatbot Enhancements:** Fixed chatbot model training pipeline, improved conversational accuracy, and integrated real-time market data (CoinGecko API) for detailed entity-aware responses.
+- **AI Chatbot Enhancements:** Fixed chatbot model training pipeline, improved conversational accuracy, and integrated real-time market data (CoinGecko Library) for detailed entity-aware responses.
 
 ### 📅 March 10, 2026
 - **Identity:** Standardized project branding as **MoonChat** (corrected previous typos).
