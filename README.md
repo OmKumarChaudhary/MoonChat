@@ -30,6 +30,53 @@ MoonChat is a modern, AI-powered social and financial application designed for t
 - **APIs:** CoinGecko Library for Crypto Data
 - **AI/ML:** TensorFlow, NLTK, NumPy, Pandas (for Chatbot logic)
 
+
+### Screenshots
+
+<p align="center">
+  <img src="ss/1.jpeg" width="30%" />
+  <img src="ss/2.jpeg" width="30%" />
+  <img src="ss/3.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="ss/4.jpeg" width="30%" />
+  <img src="ss/5.jpeg" width="30%" />
+  <img src="ss/6.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="ss/7.jpeg" width="30%" />
+  <img src="ss/8.jpeg" width="30%" />
+  <img src="ss/9.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="ss/10.jpeg" width="30%" />
+  <img src="ss/11.jpeg" width="30%" />
+  <img src="ss/12.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="ss/13.jpeg" width="30%" />
+  <img src="ss/14.jpeg" width="30%" />
+  <img src="ss/15.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="ss/16.jpeg" width="30%" />
+  <img src="ss/17.jpeg" width="30%" />
+  <img src="ss/18.jpeg" width="30%" />
+</p>
+<p align="center">
+  <img src="ss/19.jpeg" width="30%" />
+  <img src="ss/20.jpeg" width="30%" />
+  <img src="ss/21.jpeg" width="30%" />
+</p>
+
+
+### Demo Video
+
+<p align="center">
+  <iframe src="https://drive.google.com/file/d/18mSveKjDQOlVe828c6_usRApBpHPePc0/preview" width="640" height="480" allow="autoplay" allowfullscreen></iframe>
+</p>
+
+
 ---
 
 ## 📥 Getting Started
