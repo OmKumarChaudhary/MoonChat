@@ -73,7 +73,9 @@ MoonChat is a modern, AI-powered social and financial application designed for t
 ### Demo Video
 
 <p align="center">
-  <iframe src="https://drive.google.com/file/d/18mSveKjDQOlVe828c6_usRApBpHPePc0/preview" width="640" height="480" allow="autoplay" allowfullscreen></iframe>
+  <a href="https://drive.google.com/file/d/18mSveKjDQOlVe828c6_usRApBpHPePc0/preview" target="_blank">
+    <img src="https://img.shields.io/badge/🎥_Watch_Demo_Video-blue?style=for-the-badge" alt="Watch Demo Video" />
+  </a>
 </p>
 
 
