@@ -1,24 +1,10 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:moonchat/models/crypto_model.dart';
+import 'package:moonchat/utils/constants.dart';
 
 class CryptoService {
-  // Use localhost for web, desktop, and physical devices (if on same network)
-  // Use 10.0.2.2 specifically for the Android emulator
-  static String get baseUrl {
-    if (kIsWeb) return 'http://localhost:5000/api/crypto';
-    
-    // Check if running on Android/iOS emulator vs physical/desktop
-    // Simple heuristic: default to localhost for desktop/physical, 
-    // 10.0.2.2 for Android emulator.
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      // This is a rough check, in a real scenario you might check if actually an emulator
-      // For this task, we will try to be smarter or just provide a better default.
-      return 'http://10.0.2.2:5000/api/crypto';
-    }
-    return 'http://localhost:5000/api/crypto'; 
-  }
+  static String get baseUrl => '${AppConstants.baseUrl}/api/crypto';
 
   // In-memory cache for crypto prices
   static List<CryptoModel>? _cachedTopCryptos;

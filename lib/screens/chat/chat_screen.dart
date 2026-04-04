@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -32,10 +33,22 @@ class _ChatScreenState extends State<ChatScreen> {
   late String _chatRoomId;
   bool _showEmoji = false;
   final FocusNode _focusNode = FocusNode();
+  MemoryImage? _receiverProfileImage;
+  final Map<String, Uint8List> _imageCache = {};
+
+  Uint8List _getDecodedImage(String base64String) {
+    if (!_imageCache.containsKey(base64String)) {
+      _imageCache[base64String] = base64Decode(base64String);
+    }
+    return _imageCache[base64String]!;
+  }
 
   @override
   void initState() {
     super.initState();
+    if (widget.receiver.profileImage != null) {
+      _receiverProfileImage = MemoryImage(base64Decode(widget.receiver.profileImage!));
+    }
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         setState(() => _showEmoji = false);
@@ -112,9 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage: widget.receiver.profileImage != null
-                    ? MemoryImage(base64Decode(widget.receiver.profileImage!))
-                    : null,
+                backgroundImage: _receiverProfileImage,
                 child: widget.receiver.profileImage == null
                     ? Text(widget.receiver.fullName[0], style: const TextStyle(fontSize: 24, color: Colors.white))
                     : null,
@@ -178,9 +189,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: widget.receiver.profileImage != null
-                      ? MemoryImage(base64Decode(widget.receiver.profileImage!))
-                      : null,
+                  backgroundImage: _receiverProfileImage,
                   child: widget.receiver.profileImage == null
                       ? Text(widget.receiver.fullName[0], style: const TextStyle(color: Colors.white))
                       : null,
@@ -329,9 +338,7 @@ class _ChatScreenState extends State<ChatScreen> {
               if (!isMe) ...[
                 CircleAvatar(
                   radius: 12,
-                  backgroundImage: widget.receiver.profileImage != null
-                      ? MemoryImage(base64Decode(widget.receiver.profileImage!))
-                      : null,
+                  backgroundImage: _receiverProfileImage,
                   child: widget.receiver.profileImage == null
                       ? Text(widget.receiver.fullName[0], style: const TextStyle(fontSize: 8, color: Colors.white))
                       : null,
@@ -366,7 +373,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   maxHeight: 250,
                                 ),
                                 child: Image.memory(
-                                  base64Decode(message.imageUrl!), 
+                                  _getDecodedImage(message.imageUrl!), 
                                   fit: BoxFit.contain,
                                 ),
                               ),

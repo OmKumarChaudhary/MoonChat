@@ -169,12 +169,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
         final user = _searchResults[index];
         return ListTile(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChatScreen(receiver: user),
-              ),
-            );
+            Future.delayed(const Duration(milliseconds: 50), () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(receiver: user),
+                ),
+              );
+            });
           },
           leading: CircleAvatar(
             backgroundImage: user.profileImage != null
@@ -298,7 +300,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          Future.delayed(const Duration(milliseconds: 50), onTap);
+        },
+        highlightColor: Colors.transparent,
+        splashColor: const Color(0x337041EE),
+        borderRadius: BorderRadius.circular(12),
         child: Row(
           children: [
             Stack(

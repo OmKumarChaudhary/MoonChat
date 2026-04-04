@@ -10,7 +10,9 @@ import 'package:moonchat/screens/home_screen.dart';
 import 'package:moonchat/screens/profile/account_settings_screen.dart';
 import 'package:moonchat/screens/profile/linked_accounts_screen.dart';
 import 'package:moonchat/services/chat_service.dart';
+import 'package:moonchat/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -44,6 +46,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _chatService.updateUserStatus(true);
+    NotificationService.initialize();
   }
 
   @override
@@ -71,7 +74,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         primarySwatch: Colors.red,
         scaffoldBackgroundColor: const Color(0xFF151522),
       ),
-      home: const OnboardingScreen(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              backgroundColor: Color(0xFF151522),
+              body: Center(child: CircularProgressIndicator(color: Color(0xFF7041EE))),
+            );
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            return const HomeScreen();
+          }
+          return const OnboardingScreen();
+        },
+      ),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:moonchat/utils/constants.dart';
 
 class AIAssistantScreen extends StatefulWidget {
   const AIAssistantScreen({Key? key}) : super(key: key);
@@ -29,11 +30,8 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     _scrollToBottom();
 
     try {
-      // Backend URL - Adjust if your backend is on a different host/port
-      // For Android emulator, use 10.0.2.2. For web/real device, use the IP.
-      // Defaulting to localhost:5000 for web/desktop debugging.
       final response = await http.post(
-        Uri.parse('http://localhost:5000/api/chatbot/ask'),
+        Uri.parse('${AppConstants.baseUrl}/api/chatbot/ask'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'message': text}),
       );
@@ -126,9 +124,22 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
             ),
           ),
           if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Center(child: CircularProgressIndicator(color: Color(0xFF7041EE))),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                margin: const EdgeInsets.only(left: 20, bottom: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF222232),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(4),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: const TypingIndicator(),
+              ),
             ),
           _buildInputArea(),
         ],
@@ -203,6 +214,72 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TypingIndicator extends StatefulWidget {
+  const TypingIndicator({Key? key}) : super(key: key);
+
+  @override
+  State<TypingIndicator> createState() => _TypingIndicatorState();
+}
+
+class _TypingIndicatorState extends State<TypingIndicator> with TickerProviderStateMixin {
+  late List<AnimationController> _controllers;
+  late List<Animation<double>> _animations;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(3, (index) {
+      return AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 600),
+      );
+    });
+
+    _animations = _controllers.map((controller) {
+      return Tween<double>(begin: 0.2, end: 1.0).animate(
+        CurvedAnimation(parent: controller, curve: Curves.easeInOut),
+      );
+    }).toList();
+
+    for (int i = 0; i < 3; i++) {
+      Future.delayed(Duration(milliseconds: i * 200), () {
+        if (mounted) {
+          _controllers[i].repeat(reverse: true);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(3, (index) {
+        return FadeTransition(
+          opacity: _animations[index],
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            height: 6,
+            width: 6,
+            decoration: const BoxDecoration(
+              color: Colors.white70,
+              shape: BoxShape.circle,
+            ),
+          ),
+        );
+      }),
     );
   }
 }

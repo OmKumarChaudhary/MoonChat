@@ -6,6 +6,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
+import 'privacy_security_screen.dart';
+import 'notifications_screen.dart';
+import 'chat_settings_screen.dart';
+import 'help_center_screen.dart';
+import 'report_problem_screen.dart';
+import 'terms_privacy_screen.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -72,19 +79,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _logout(BuildContext context) async {
     try {
-      if (await GoogleSignIn().isSignedIn()) {
-        await GoogleSignIn().signOut();
+      try {
+        if (await GoogleSignIn().isSignedIn()) {
+          await GoogleSignIn().disconnect();
+          await GoogleSignIn().signOut();
+        }
+      } catch (e) {
+        debugPrint("Google Signout Error: $e");
       }
+      
       await FirebaseAuth.instance.signOut();
       
       if (context.mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
       }
     } catch (e) {
       debugPrint("Logout Error: $e");
       if (context.mounted) {
-        // Even if error, try to navigate to login to avoid stuck user
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
       }
     }
   }
@@ -192,7 +204,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildSettingsItem(
                     icon: Icons.shield_outlined, 
                     title: 'Privacy & Security',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const PrivacySecurityScreen()));
+                    },
                   ),
                   _buildSettingsItem(
                     icon: Icons.link, 
@@ -203,16 +217,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
                   // Preferences Section
                   _buildSectionHeader('PREFERENCES'),
-                  _buildSettingsItem(icon: Icons.notifications_outlined, title: 'Notifications', onTap: () {}),
-                  _buildSettingsItem(icon: Icons.visibility_outlined, title: 'Appearance', trailingText: 'System', onTap: () {}),
-                  _buildSettingsItem(icon: Icons.chat_bubble_outline, title: 'Chat Settings', onTap: () {}),
+                  _buildSettingsItem(
+                    icon: Icons.notifications_outlined, 
+                    title: 'Notifications', 
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsScreen()));
+                    }
+                  ),
+                  _buildSettingsItem(
+                    icon: Icons.chat_bubble_outline, 
+                    title: 'Chat Settings', 
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatSettingsScreen()));
+                    }
+                  ),
 
                   const SizedBox(height: 24),
                   // Support & Legal Section
                   _buildSectionHeader('SUPPORT & LEGAL'),
-                  _buildSettingsItem(icon: Icons.help_outline, title: 'Help Center', onTap: () {}),
-                  _buildSettingsItem(icon: Icons.flag_outlined, title: 'Report a Problem', onTap: () {}),
-                  _buildSettingsItem(icon: Icons.privacy_tip_outlined, title: 'Terms & Privacy', onTap: () {}),
+                  _buildSettingsItem(
+                    icon: Icons.help_outline, 
+                    title: 'Help Center', 
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpCenterScreen()));
+                    }
+                  ),
+                  _buildSettingsItem(
+                    icon: Icons.flag_outlined, 
+                    title: 'Report a Problem', 
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ReportProblemScreen()));
+                    }
+                  ),
+                  _buildSettingsItem(
+                    icon: Icons.privacy_tip_outlined, 
+                    title: 'Terms & Privacy', 
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const TermsPrivacyScreen()));
+                    }
+                  ),
 
                   const SizedBox(height: 40),
                   // Logout Button

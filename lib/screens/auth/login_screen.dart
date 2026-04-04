@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }
     } on FirebaseAuthException catch (e) {
        String message = 'An error occurred';
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await FirebaseAuth.instance.signInWithCredential(credential);
       
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }
     } catch (e) {
       debugPrint("Google Sign In Error: $e");
@@ -117,8 +117,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF151522),
+    return WillPopScope(
+      onWillPop: () async {
+        if (Navigator.canPop(context)) {
+          return true;
+        } else {
+          Navigator.pushReplacementNamed(context, '/');
+          return false;
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFF151522),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
@@ -127,7 +136,13 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 10),
                GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.pushReplacementNamed(context, '/');
+                  }
+                },
                 child: const Icon(Icons.arrow_back, color: Colors.white),
               ),
               const SizedBox(height: 10),
@@ -323,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildSocialButton({required IconData icon, required String text, required VoidCallback onPressed}) {

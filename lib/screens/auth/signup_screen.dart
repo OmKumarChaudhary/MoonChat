@@ -37,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
       
       // Navigate to Profile Setup
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/profile_setup');
+        Navigator.pushNamedAndRemoveUntil(context, '/profile_setup', (route) => false);
       }
     } on FirebaseAuthException catch (e) {
       String message = 'An error occurred';
@@ -95,14 +95,14 @@ class _SignupScreenState extends State<SignupScreen> {
         if (userCredential.user != null) {
            final userDoc = await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).get();
            if (userDoc.exists && userDoc.data()!.containsKey('profileSetupCompleted') && userDoc.data()!['profileSetupCompleted'] == true) {
-             if (mounted) Navigator.pushReplacementNamed(context, '/home');
+             if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
            } else {
-             if (mounted) Navigator.pushReplacementNamed(context, '/profile_setup');
+             if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/profile_setup', (route) => false);
            }
         }
       } catch (e) {
         // If checking fails, default to profile setup to be safe
-        if (mounted) Navigator.pushReplacementNamed(context, '/profile_setup');
+        if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/profile_setup', (route) => false);
       }
 
     } catch (e) {
