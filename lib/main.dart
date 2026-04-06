@@ -76,14 +76,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
+        initialData: FirebaseAuth.instance.currentUser,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              backgroundColor: Color(0xFF151522),
-              body: Center(child: CircularProgressIndicator(color: Color(0xFF7041EE))),
-            );
-          }
-          if (snapshot.hasData && snapshot.data != null) {
+          final user = snapshot.data ?? FirebaseAuth.instance.currentUser;
+          if (user != null) {
             return const HomeScreen();
           }
           return const OnboardingScreen();
