@@ -2,3 +2,4 @@ flask
 flask-cors
 pycoingecko
 requests
+firebase-admin

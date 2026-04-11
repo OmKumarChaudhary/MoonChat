@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:moonchat/models/user_model.dart';
 import 'package:moonchat/screens/chat/chat_screen.dart';
 import 'package:moonchat/screens/profile/profile_screen.dart';
@@ -18,12 +20,78 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  StreamSubscription<DocumentSnapshot>? _userStatusSub;
 
   final List<Widget> _pages = [
     const ChatListScreen(),
     const CryptoTrackScreen(),
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _listenForDisabledStatus();
+  }
+
+  /// Real-time listener: kicks the user out the moment admin disables them.
+  void _listenForDisabledStatus() {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    _userStatusSub = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .listen((doc) async {
+      final data = doc.data();
+      if (data != null && data['disabled'] == true) {
+        await _userStatusSub?.cancel();
+        await FirebaseAuth.instance.signOut();
+        if (mounted) {
+          // Show banned dialog then redirect
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AlertDialog(
+              backgroundColor: const Color(0xFF1D1D2C),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Row(
+                children: [
+                  Icon(Icons.block, color: Colors.red, size: 28),
+                  SizedBox(width: 10),
+                  Text('Account Disabled',
+                      style: TextStyle(color: Colors.white, fontSize: 18)),
+                ],
+              ),
+              content: const Text(
+                'Your account has been disabled by an administrator. Please contact support if you believe this is a mistake.',
+                style: TextStyle(color: Colors.white70, height: 1.5),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: const Text('OK', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _userStatusSub?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

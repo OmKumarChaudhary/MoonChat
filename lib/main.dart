@@ -4,6 +4,7 @@ import 'package:moonchat/screens/onboard/onboarding_screen.dart';
 import 'package:moonchat/screens/auth/login_screen.dart';
 import 'package:moonchat/screens/auth/signup_screen.dart';
 import 'package:moonchat/screens/auth/forgot_password_screen.dart';
+import 'package:moonchat/screens/auth/verify_email_screen.dart';
 import 'package:moonchat/screens/chat/ai_assistant_screen.dart';
 import 'package:moonchat/screens/profile/profile_setup_screen.dart';
 import 'package:moonchat/screens/home_screen.dart';
@@ -14,6 +15,7 @@ import 'package:moonchat/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
+import 'package:moonchat/admin/admin_dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,7 +82,38 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         builder: (context, snapshot) {
           final user = snapshot.data ?? FirebaseAuth.instance.currentUser;
           if (user != null) {
-            return const HomeScreen();
+            // Enforce email verification
+            if (!user.emailVerified) {
+              return const VerifyEmailScreen();
+            }
+
+            // Check if user is disabled in Firestore before granting access
+            return FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user.uid)
+                  .get(const GetOptions(source: Source.server)),
+              builder: (context, docSnap) {
+                if (docSnap.connectionState == ConnectionState.waiting) {
+                  // Show a splash/loading screen while checking
+                  return const Scaffold(
+                    backgroundColor: Color(0xFF151522),
+                    body: Center(
+                      child: CircularProgressIndicator(color: Color(0xFF7041EE)),
+                    ),
+                  );
+                }
+
+                final data = docSnap.data?.data() as Map<String, dynamic>?;
+                if (data != null && data['disabled'] == true) {
+                  // Sign out and send to onboarding
+                  FirebaseAuth.instance.signOut();
+                  return const OnboardingScreen();
+                }
+
+                return const HomeScreen();
+              },
+            );
           }
           return const OnboardingScreen();
         },
@@ -88,12 +121,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
+        '/verify_email': (context) => const VerifyEmailScreen(),
         '/forgot_password': (context) => const ForgotPasswordScreen(),
         '/ai_assistant': (context) => const AIAssistantScreen(),
         '/profile_setup': (context) => const ProfileSetupScreen(),
         '/home': (context) => const HomeScreen(),
         '/account_settings': (context) => const AccountSettingsScreen(),
         '/linked_accounts': (context) => const LinkedAccountsScreen(),
+        '/admin': (context) => const AdminDashboard(),
       },
     );
   }

@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:moonchat/screens/profile/terms_privacy_screen.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
@@ -49,14 +51,17 @@ class _SignupScreenState extends State<SignupScreen> {
     });
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
       
-      // Navigate to Profile Setup
+      // Send verification email
+      await userCredential.user?.sendEmailVerification();
+      
+      // Navigate to Verification Screen
       if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/profile_setup', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/verify_email', (route) => false);
       }
     } on FirebaseAuthException catch (e) {
       String message = 'An error occurred';
@@ -347,6 +352,38 @@ class _SignupScreenState extends State<SignupScreen> {
                      ),
                    ),
                  ],
+               ),
+               
+               const SizedBox(height: 24),
+               
+               // Terms and conditions agreement
+               Center(
+                 child: Column(
+                   children: [
+                     const Text(
+                       "By signing up, you agree to our",
+                       style: TextStyle(color: Colors.white38, fontSize: 12),
+                     ),
+                     const SizedBox(height: 4),
+                     GestureDetector(
+                       onTap: () {
+                         Navigator.push(
+                           context,
+                           MaterialPageRoute(builder: (context) => const TermsPrivacyScreen()),
+                         );
+                       },
+                       child: const Text(
+                         "Terms of Service & Privacy Policy",
+                         style: TextStyle(
+                           color: Color(0xFF7041EE),
+                           fontSize: 12,
+                           fontWeight: FontWeight.bold,
+                           decoration: TextDecoration.underline,
+                         ),
+                       ),
+                     ),
+                   ],
+                 ),
                ),
             ],
           ),

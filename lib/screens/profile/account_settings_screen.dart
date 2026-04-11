@@ -14,6 +14,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   bool isLoading = true;
   bool isSaving = false;
+  bool isAdmin = false;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
@@ -113,7 +114,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   Future<void> _fetchUserData() async {
     if (user != null) {
       try {
-        DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+        DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(user!.uid).get(const GetOptions(source: Source.server));
         if (doc.exists) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           setState(() {
@@ -123,6 +124,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             _emailController.text = data['email'] ?? user?.email ?? '';
             _dobController.text = data['dob'] ?? '';
             _selectedGender = data['gender'];
+            isAdmin = data['isAdmin'] == true;
             isLoading = false;
           });
         } else {
@@ -225,6 +227,12 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                      ),
                      const SizedBox(height: 16),
                      _buildChangePasswordButton(),
+                     if (isAdmin) ...[
+                       const SizedBox(height: 32),
+                       const Divider(color: Colors.white24),
+                       const SizedBox(height: 16),
+                       _buildAdminPanelButton(),
+                     ],
                   ],
                 ),
               ),
@@ -352,6 +360,26 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
         child: const Text(
           "Change Password",
           style: TextStyle(color: Color(0xFF7041EE), fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdminPanelButton() {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/admin');
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: const Text(
+          "Enter Admin Panel",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
     );

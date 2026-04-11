@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:moonchat/screens/profile/legal_document_screen.dart';
 
+/// Hub screen — lets user choose Privacy Policy or Terms of Service.
+/// Both documents are fetched live from Firestore (managed by admin CRUD panel).
 class TermsPrivacyScreen extends StatelessWidget {
   const TermsPrivacyScreen({Key? key}) : super(key: key);
 
@@ -8,11 +11,11 @@ class TermsPrivacyScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF151522),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFF1D1D2C),
         elevation: 0,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          child: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
         ),
         title: const Text(
           'Terms & Privacy',
@@ -20,53 +23,173 @@ class TermsPrivacyScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1D1D2C), Color(0xFF252540)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Icon(Icons.shield_outlined, color: Color(0xFF7041EE), size: 32),
+                SizedBox(height: 12),
+                Text(
+                  'Your Rights & Our Policies',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Read our legal documents to understand how we handle your data and what you agree to when using MoonChat.',
+                  style: TextStyle(color: Colors.white54, fontSize: 13, height: 1.6),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          const Text(
+            'LEGAL DOCUMENTS',
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.4),
+          ),
+          const SizedBox(height: 12),
+
+          // Privacy Policy card
+          _buildDocCard(
+            context,
+            icon: Icons.privacy_tip_rounded,
+            iconColor: const Color(0xFF7041EE),
+            title: 'Privacy Policy',
+            subtitle: 'How we collect, use, and protect your personal data.',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const LegalDocumentScreen(
+                  docKey: 'privacy_policy',
+                  title: 'Privacy Policy',
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // Terms of Service card
+          _buildDocCard(
+            context,
+            icon: Icons.gavel_rounded,
+            iconColor: const Color(0xFF7041EE),
+            title: 'Terms of Service',
+            subtitle: 'Rules and guidelines for using MoonChat responsibly.',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const LegalDocumentScreen(
+                  docKey: 'terms_of_service',
+                  title: 'Terms of Service',
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 32),
+
+          // Contact note
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1D1D2C),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: Row(
+              children: const [
+                Icon(Icons.mail_outline, color: Color(0xFF7041EE), size: 20),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Questions about our policies? Contact us at support@moonchat.app',
+                    style: TextStyle(
+                        color: Colors.white54, fontSize: 13, height: 1.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDocCard(
+    BuildContext context, {
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1D1D2C),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: Row(
           children: [
-            _buildHeading('Terms of Service'),
-            const SizedBox(height: 12),
-            _buildText(
-              'By using MoonChat, you agree to these terms. Please read them carefully. You must follow any policies made available to you within the Services. Do not misuse our Services. For example, do not interfere with our Services or try to access them using a method other than the interface and the instructions that we provide.',
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: iconColor, size: 24),
             ),
-            const SizedBox(height: 24),
-            _buildHeading('Privacy Policy'),
-            const SizedBox(height: 12),
-            _buildText(
-              'Your privacy is important to us. We only collect the information you choose to give us, and we process it with your consent, or on another legal basis; we only require the minimum amount of personal information that is necessary to fulfill the purpose of your interaction with us; we don\'t sell it to third parties.',
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                        color: Colors.white54, fontSize: 13, height: 1.4),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 24),
-            _buildHeading('Data Collection'),
-            const SizedBox(height: 12),
-            _buildText(
-              'We may collect data such as your username, email, and messages in order to provide basic functionalities. This information is stored securely and processed in accordance with industry standards.',
-            ),
-            const SizedBox(height: 48),
+            const SizedBox(width: 8),
+            const Icon(Icons.arrow_forward_ios,
+                color: Colors.white38, size: 16),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeading(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  Widget _buildText(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Colors.grey,
-        fontSize: 15,
-        height: 1.6,
       ),
     );
   }
