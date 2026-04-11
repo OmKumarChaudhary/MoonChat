@@ -137,7 +137,7 @@ MoonChat is a modern, AI-powered social and financial application designed for t
 ### 📅 April 2026
 - **Backend Migration:** A new backend repository has been created. The backend was containerized and deployed to Hugging Face Spaces using Docker.
 - **Authentication:** Implemented token-based authentication flow and fixed login persistence issues across app sessions.
-- **Notifications:** Integrated Firebase Cloud Messaging for robust, customizable push notifications.
+- **Notifications:** Integrated Firebase Cloud Messaging for robust, customizable push notifications(Not Working).
 - **Settings & Privacy:** Built comprehensive Settings and Privacy UI screens.
 - **Performance & Bug Fixes:** Resolved chat screen performance issues (lagging and minor visual bugs), and fixed mobile data loading issues on physical devices.
 - **AI Chatbot Enhancements:** Fixed chatbot model training pipeline, improved conversational accuracy, and integrated real-time market data (CoinGecko Library) for detailed entity-aware responses.
