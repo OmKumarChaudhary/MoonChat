@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
-      // ✅ Check if user is disabled in Firestore
+      // Check if user is disabled in Firestore
       final uid = credential.user?.uid;
       if (uid != null) {
         final doc = await FirebaseFirestore.instance
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // ✅ Check if user is disabled in Firestore
+      // Check if user is disabled in Firestore
       final uid = userCredential.user?.uid;
       if (uid != null) {
         final doc = await FirebaseFirestore.instance

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:moonchat/screens/profile/legal_document_screen.dart';
 
-/// Hub screen — lets user choose Privacy Policy or Terms of Service.
+/// Hub screen â€” lets user choose Privacy Policy or Terms of Service.
 /// Both documents are fetched live from Firestore (managed by admin CRUD panel).
 class TermsPrivacyScreen extends StatelessWidget {
   const TermsPrivacyScreen({Key? key}) : super(key: key);
@@ -124,7 +124,7 @@ class TermsPrivacyScreen extends StatelessWidget {
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Questions about our policies? Contact us at support@moonchat.app',
+                    'Questions about our policies? Contact us at omkumar.wd@gmail.com',
                     style: TextStyle(
                         color: Colors.white54, fontSize: 13, height: 1.5),
                   ),
@@ -194,3 +194,4 @@ class TermsPrivacyScreen extends StatelessWidget {
     );
   }
 }
+

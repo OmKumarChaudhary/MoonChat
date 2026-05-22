@@ -70,6 +70,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '39168642996',
     projectId: 'moonchat-6ba9a',
     storageBucket: 'moonchat-6ba9a.firebasestorage.app',
-    iosBundleId: 'com.example.moonchat',
+    iosBundleId: 'com.omkumar.moonchat',
   );
 }

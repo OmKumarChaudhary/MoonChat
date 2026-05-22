@@ -43,3 +43,44 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Sensitive Credentials, Keys, & Secrets
+# ----------------------------------------
+# Environment variables containing API keys, database passwords, tokens, etc.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.sample
+!.env.example
+*.env
+
+# Android keystores and credentials
+**/android/key.properties
+**/android/local.properties
+*.keystore
+*.jks
+*.properties
+
+# iOS certificates and signing profiles
+*.developerprofile
+*.provisionprofile
+*.cert
+*.p12
+*.mobileprovision
+
+# Firebase / Google Service Account Keys (Private Keys)
+*-service-account.json
+*serviceAccount*.json
+*service-account*.json
+firebase-key.json
+firebase-credentials.json
+secrets.json
+
+# API credentials / secret tokens
+credentials.json
+client_secret.json
+client_secret_*.json
+local_settings.py
+secrets.py
