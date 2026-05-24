@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moonchat/models/crypto_model.dart';
 import 'package:moonchat/services/crypto_service.dart';
 import 'package:intl/intl.dart';
 
 class CryptoTrackScreen extends StatefulWidget {
-  const CryptoTrackScreen({Key? key}) : super(key: key);
+  const CryptoTrackScreen({super.key});
 
   @override
   State<CryptoTrackScreen> createState() => _CryptoTrackScreenState();
@@ -17,21 +18,74 @@ class _CryptoTrackScreenState extends State<CryptoTrackScreen> {
   List<CryptoModel> _searchResults = [];
   bool _isLoading = true;
   bool _isSearching = false;
+  Timer? _autoRefreshTimer;
 
   @override
   void initState() {
     super.initState();
-    _fetchCryptos();
+    _loadCachedAndFetchFresh();
+    _startAutoRefreshTimer();
+  }
+
+  @override
+  void dispose() {
+    _autoRefreshTimer?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _loadCachedAndFetchFresh() async {
+    // 1. Immediately load cache if available (instant loading)
+    final cached = _cryptoService.getCachedCryptos();
+    if (cached != null && cached.isNotEmpty) {
+      setState(() {
+        _cryptos = cached;
+        _isLoading = false;
+      });
+    }
+
+    // 2. Fetch fresh data in the background without blocking the UI
+    final fresh = await _cryptoService.getTopCryptos();
+    if (mounted) {
+      setState(() {
+        if (fresh.isNotEmpty) {
+          _cryptos = fresh;
+        }
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _fetchCryptos() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final cryptos = await _cryptoService.getTopCryptos();
-    setState(() {
-      _cryptos = cryptos;
-      _isLoading = false;
+    // Force a fresh reload and show loading spinner only if we don't have any cached/loaded data
+    if (_cryptos.isEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    final fresh = await _cryptoService.getTopCryptos(forceRefresh: true);
+    if (mounted) {
+      setState(() {
+        if (fresh.isNotEmpty) {
+          _cryptos = fresh;
+        }
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _startAutoRefreshTimer() {
+    _autoRefreshTimer?.cancel();
+    _autoRefreshTimer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+      // Refresh real data automatically if the user is not actively searching
+      if (_searchController.text.isEmpty) {
+        final fresh = await _cryptoService.getTopCryptos(forceRefresh: true);
+        if (fresh.isNotEmpty && mounted) {
+          setState(() {
+            _cryptos = fresh;
+          });
+        }
+      }
     });
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:moonchat/models/crypto_model.dart';
 import 'package:moonchat/utils/constants.dart';
@@ -11,9 +12,13 @@ class CryptoService {
   static DateTime? _lastFetchTime;
   static const _cacheDuration = Duration(minutes: 5);
 
-  Future<List<CryptoModel>> getTopCryptos() async {
-    // Return cached data if available and fresh
-    if (_cachedTopCryptos != null && _lastFetchTime != null && 
+  List<CryptoModel>? getCachedCryptos() {
+    return _cachedTopCryptos;
+  }
+
+  Future<List<CryptoModel>> getTopCryptos({bool forceRefresh = false}) async {
+    // Return cached data if available and fresh, unless forced
+    if (!forceRefresh && _cachedTopCryptos != null && _lastFetchTime != null && 
         DateTime.now().difference(_lastFetchTime!) < _cacheDuration) {
       return _cachedTopCryptos!;
     }
@@ -33,7 +38,7 @@ class CryptoService {
         throw Exception('Failed to load cryptos');
       }
     } catch (e) {
-      print('Error fetching cryptos: $e');
+      debugPrint('Error fetching cryptos: $e');
       return [];
     }
   }
@@ -48,7 +53,7 @@ class CryptoService {
         throw Exception('Failed to search cryptos');
       }
     } catch (e) {
-      print('Error searching cryptos: $e');
+      debugPrint('Error searching cryptos: $e');
       return [];
     }
   }

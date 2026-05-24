@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
-  const ProfileSetupScreen({Key? key}) : super(key: key);
+  const ProfileSetupScreen({super.key});
 
   @override
   State<ProfileSetupScreen> createState() => _ProfileSetupScreenState();
@@ -24,7 +24,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   String? _base64Image;
 
   // Username validation
-  String? _usernameError;
   bool _isCheckingUsername = false;
   bool? _isUsernameAvailable;
   Timer? _debounce;
@@ -49,7 +48,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     
     setState(() {
-      _usernameError = null;
       _isUsernameAvailable = null;
       _isCheckingUsername = true;
     });
@@ -71,7 +69,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       if (mounted) {
         setState(() {
           _isCheckingUsername = false;
-          _usernameError = "Username must be at least 3 chars";
           _isUsernameAvailable = false;
         });
       }
@@ -88,10 +85,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
         setState(() {
           _isCheckingUsername = false;
           if (result.docs.isNotEmpty) {
-            _usernameError = "Username unavailable";
             _isUsernameAvailable = false;
           } else {
-            _usernameError = null;
             _isUsernameAvailable = true;
           }
         });
@@ -149,8 +144,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               onPrimary: Colors.white,
               surface: Color(0xFF222232),
               onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: const Color(0xFF151522),
+            ), dialogTheme: DialogThemeData(backgroundColor: const Color(0xFF151522)),
           ),
           child: child!,
         );
@@ -455,7 +449,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    disabledBackgroundColor: const Color(0xFF222232).withOpacity(0.5),
+                    disabledBackgroundColor: const Color(0xFF222232).withValues(alpha: 0.5),
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)

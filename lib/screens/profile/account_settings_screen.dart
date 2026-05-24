@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class AccountSettingsScreen extends StatefulWidget {
-  const AccountSettingsScreen({Key? key}) : super(key: key);
+  const AccountSettingsScreen({super.key});
 
   @override
   State<AccountSettingsScreen> createState() => _AccountSettingsScreenState();
@@ -80,11 +80,13 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
 
   Future<void> _checkUsernameAvailability(String username) async {
     if (username.length < 3) {
-      if (mounted) setState(() {
+      if (mounted) {
+        setState(() {
          _isCheckingUsername = false;
          _usernameError = "Too short";
          _isUsernameAvailable = false;
       });
+      }
       return;
     }
 
@@ -331,7 +333,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   }
 
   Widget _buildChangePasswordButton() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: OutlinedButton(
         onPressed: () async {
@@ -366,7 +368,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   }
 
   Widget _buildAdminPanelButton() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {

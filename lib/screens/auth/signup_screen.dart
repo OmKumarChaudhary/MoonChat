@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:moonchat/screens/profile/terms_privacy_screen.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -81,59 +79,6 @@ class _SignupScreenState extends State<SignupScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _signInWithGoogle() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        setState(() {
-          _isLoading = false;
-        });
-        return; // User canceled
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      
-      // Check if user has profile setup (e.g., check for username field)
-      try {
-        if (userCredential.user != null) {
-           final userDoc = await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).get();
-           if (userDoc.exists && userDoc.data()!.containsKey('profileSetupCompleted') && userDoc.data()!['profileSetupCompleted'] == true) {
-             if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-           } else {
-             if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/profile_setup', (route) => false);
-           }
-        }
-      } catch (e) {
-        // If checking fails, default to profile setup to be safe
-        if (mounted) Navigator.pushNamedAndRemoveUntil(context, '/profile_setup', (route) => false);
-      }
-
-    } catch (e) {
-      debugPrint("Google Sign In Error: $e");
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Google Sign In Failed: $e')),
         );
       }
     } finally {
@@ -392,34 +337,5 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget _buildSocialButton({required IconData icon, required String text, required VoidCallback onPressed}) {
-    return Container(
-      width: double.infinity,
-      height: 55,
-      decoration: BoxDecoration(
-        color: const Color(0xFF222232),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.2)),
-      ),
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(width: 12),
-            Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 }

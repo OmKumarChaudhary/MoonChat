@@ -4,19 +4,29 @@ import 'package:http/http.dart' as http;
 import 'package:moonchat/utils/constants.dart';
 
 class AIAssistantScreen extends StatefulWidget {
-  const AIAssistantScreen({Key? key}) : super(key: key);
+  const AIAssistantScreen({super.key});
 
   @override
   State<AIAssistantScreen> createState() => _AIAssistantScreenState();
 }
 
+// Global cache for fast-loading chatbot context
+final List<Map<String, String>> _cachedAIMessages = [
+  {'role': 'assistant', 'content': 'Hello! I am your MoonChat AI Assistant. How can I help you today?'}
+];
+
 class _AIAssistantScreenState extends State<AIAssistantScreen> {
   final TextEditingController _messageController = TextEditingController();
-  final List<Map<String, String>> _messages = [
-    {'role': 'assistant', 'content': 'Hello! I am your MoonChat AI Assistant. How can I help you today?'}
-  ];
+  late List<Map<String, String>> _messages;
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = _cachedAIMessages; // Use cached messages for instant load
+    _scrollToBottom();
+  }
 
   Future<void> _sendMessage() async {
     final text = _messageController.text.trim();
@@ -89,7 +99,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF7041EE).withOpacity(0.2),
+                color: const Color(0xFF7041EE).withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.smart_toy, color: Color(0xFF7041EE), size: 20),
@@ -219,7 +229,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
 }
 
 class TypingIndicator extends StatefulWidget {
-  const TypingIndicator({Key? key}) : super(key: key);
+  const TypingIndicator({super.key});
 
   @override
   State<TypingIndicator> createState() => _TypingIndicatorState();

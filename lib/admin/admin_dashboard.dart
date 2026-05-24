@@ -188,10 +188,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
-                  color: selected ? Colors.red.withOpacity(0.15) : Colors.transparent,
+                  color: selected ? Colors.red.withValues(alpha: 0.15) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                   border: selected
-                      ? Border.all(color: Colors.red.withOpacity(0.3))
+                      ? Border.all(color: Colors.red.withValues(alpha: 0.3))
                       : null,
                 ),
                 child: Row(

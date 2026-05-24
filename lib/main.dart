@@ -47,8 +47,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Fire-and-forget: don't block first frame render
     _chatService.updateUserStatus(true);
-    NotificationService.initialize();
+    // Initialize notifications in the background without blocking UI
+    Future.microtask(() => NotificationService.initialize());
   }
 
   @override
@@ -87,33 +89,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               return const VerifyEmailScreen();
             }
 
-            // Check if user is disabled in Firestore before granting access
-            return FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(user.uid)
-                  .get(const GetOptions(source: Source.server)),
-              builder: (context, docSnap) {
-                if (docSnap.connectionState == ConnectionState.waiting) {
-                  // Show a splash/loading screen while checking
-                  return const Scaffold(
-                    backgroundColor: Color(0xFF151522),
-                    body: Center(
-                      child: CircularProgressIndicator(color: Color(0xFF7041EE)),
-                    ),
-                  );
-                }
-
-                final data = docSnap.data?.data() as Map<String, dynamic>?;
-                if (data != null && data['disabled'] == true) {
-                  // Sign out and send to onboarding
-                  FirebaseAuth.instance.signOut();
-                  return const OnboardingScreen();
-                }
-
-                return const HomeScreen();
-              },
-            );
+            return const HomeScreen();
           }
           return const OnboardingScreen();
         },

@@ -9,10 +9,10 @@ class LegalDocumentScreen extends StatelessWidget {
   final String title;
 
   const LegalDocumentScreen({
-    Key? key,
+    super.key,
     required this.docKey,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +228,7 @@ class LegalDocumentScreen extends StatelessWidget {
             height: 30,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: const Color(0xFF7041EE).withOpacity(0.15),
+              color: const Color(0xFF7041EE).withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(

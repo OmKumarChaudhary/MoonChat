@@ -167,7 +167,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                       color: const Color(0xFF1D1D2C),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                          color: _statusColor(status).withOpacity(0.25)),
+                          color: _statusColor(status).withValues(alpha: 0.25)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +219,7 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: _statusColor(status).withOpacity(0.15),
+                                  color: _statusColor(status).withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Row(

@@ -8,11 +8,12 @@ import 'package:moonchat/screens/profile/profile_screen.dart';
 import 'package:moonchat/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:moonchat/widgets/cached_user_widgets.dart';
 
 import 'package:moonchat/screens/crypto/crypto_track_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ChatListScreen extends StatefulWidget {
-  const ChatListScreen({Key? key}) : super(key: key);
+  const ChatListScreen({super.key});
 
   @override
   State<ChatListScreen> createState() => _ChatListScreenState();
@@ -238,12 +239,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
         return ListTile(
           onTap: () {
             Future.delayed(const Duration(milliseconds: 50), () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatScreen(receiver: user),
-                ),
-              );
+              if (context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(receiver: user),
+                  ),
+                );
+              }
             });
           },
           leading: CircleAvatar(
@@ -259,10 +262,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     );
   }
 
-  String _getFirstName(String fullName) {
-    if (fullName.isEmpty) return "User";
-    return fullName.split(' ').first;
-  }
+
 
   Widget _buildChatList() {
     return StreamBuilder<QuerySnapshot>(
@@ -321,34 +321,31 @@ class _ChatListScreenState extends State<ChatListScreen> {
                final bool isMe = data['lastSenderId'] == _chatService.currentUserId;
                final String displayMessage = isMe ? "You: ${data['lastMessage'] ?? ''}" : (data['lastMessage'] ?? '');
                
-               return StreamBuilder<DocumentSnapshot>(
-                 stream: _chatService.getUserStream(otherUserId),
-                 builder: (context, userSnapshot) {
-                   if (!userSnapshot.hasData) return const SizedBox.shrink();
-                   final user = UserModel.fromMap(userSnapshot.data!.data() as Map<String, dynamic>);
-                   
-                   return _buildChatItem(
-                      name: user.fullName,
-                      message: displayMessage,
-                      time: data['lastMessageTime'] != null 
-                        ? DateFormat('h:mm a').format((data['lastMessageTime'] as Timestamp).toDate())
-                        : '',
-                      unreadCount: unreadCount,
-                      color: Colors.blueAccent,
-                      image: user.profileImage,
-                      isOnline: user.isOnline,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(receiver: user),
-                          ),
-                        );
-                      }
-                    );
-                 },
-               );
-             }).toList()
+               return CachedUserStreamBuilder(
+                  userId: otherUserId,
+                  builder: (context, user) {
+                    return _buildChatItem(
+                       name: user.fullName,
+                       message: displayMessage,
+                       time: data['lastMessageTime'] != null 
+                         ? DateFormat('h:mm a').format((data['lastMessageTime'] as Timestamp).toDate())
+                         : '',
+                       unreadCount: unreadCount,
+                       color: Colors.blueAccent,
+                       image: user.profileImage,
+                       isOnline: user.isOnline,
+                       onTap: () {
+                         Navigator.push(
+                           context,
+                           MaterialPageRoute(
+                             builder: (context) => ChatScreen(receiver: user),
+                           ),
+                         );
+                       }
+                     );
+                  },
+                );
+             })
           ],
         );
       }

@@ -10,6 +10,7 @@ import 'package:moonchat/models/message_model.dart';
 import 'package:moonchat/models/user_model.dart';
 import 'package:moonchat/services/chat_service.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:moonchat/widgets/cached_user_widgets.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel receiver;
@@ -17,11 +18,11 @@ class ChatScreen extends StatefulWidget {
   final String? groupId;
 
   const ChatScreen({
-    Key? key,
+    super.key,
     required this.receiver,
     this.isGroup = false,
     this.groupId,
-  }) : super(key: key);
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -321,14 +322,15 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.only(left: isMe ? 0 : 32, right: isMe ? 32 : 0, bottom: 4),
               child: isMe 
                 ? const Text("You", style: TextStyle(color: Color(0xFF7041EE), fontSize: 10, fontWeight: FontWeight.bold))
-                : FutureBuilder<UserModel?>(
-                    future: _chatService.getUserProfile(message.senderId),
-                    builder: (context, snapshot) {
+                : CachedUserProfileWidget(
+                    userId: message.senderId,
+                    chatService: _chatService,
+                    builder: (context, user) {
                       return Text(
-                        _getFirstName(snapshot.data?.fullName ?? "User"),
+                        _getFirstName(user?.fullName ?? "User"),
                         style: const TextStyle(color: Colors.grey, fontSize: 10, fontWeight: FontWeight.bold),
                       );
-                    }
+                    },
                   ),
             ),
           Row(
@@ -493,7 +495,7 @@ class _ChatScreenState extends State<ChatScreen> {
 class ImageViewer extends StatelessWidget {
   final String base64Image;
 
-  const ImageViewer({Key? key, required this.base64Image}) : super(key: key);
+  const ImageViewer({super.key, required this.base64Image});
 
   @override
   Widget build(BuildContext context) {

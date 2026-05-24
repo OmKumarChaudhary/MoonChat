@@ -73,7 +73,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await user.sendEmailVerification();
+        await user.reload();
+        await FirebaseAuth.instance.currentUser?.sendEmailVerification();
         
         setState(() {
           _canResendEmail = false;
@@ -85,7 +86,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Verification email sent! Please check your inbox.'),
+              content: Text('Verification email sent! Please check your inbox and spam folder.'),
               backgroundColor: Colors.green,
             ),
           );
@@ -152,6 +153,32 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   color: Colors.white70,
                   fontFamily: 'Mulish',
                   height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0x13FFA726),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0x33FFA726), width: 1),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.info_outline, color: Colors.orangeAccent, size: 18),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'If the email is not in your inbox, please check your spam folder.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white60,
+                          fontFamily: 'Mulish',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 40),

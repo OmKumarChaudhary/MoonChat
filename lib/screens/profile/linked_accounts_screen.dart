@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LinkedAccountsScreen extends StatelessWidget {
-  const LinkedAccountsScreen({Key? key}) : super(key: key);
+  const LinkedAccountsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +11,6 @@ class LinkedAccountsScreen extends StatelessWidget {
     
     // Check linked providers
     bool isGoogleLinked = providerData.any((info) => info.providerId == 'google.com');
-    // Email is usually just 'password' provider or emailLink, but we can check if email exists.
-    bool hasEmail = user?.email != null;
 
     return Scaffold(
       backgroundColor: const Color(0xFF151522),
@@ -71,7 +69,7 @@ class LinkedAccountsScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: Colors.white, size: 28),
@@ -103,7 +101,7 @@ class LinkedAccountsScreen extends StatelessWidget {
              Container(
                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                decoration: BoxDecoration(
-                 color: const Color(0xFF7041EE).withOpacity(0.2),
+                 color: const Color(0xFF7041EE).withValues(alpha: 0.2),
                  borderRadius: BorderRadius.circular(20),
                  border: Border.all(color: const Color(0xFF7041EE)),
                ),

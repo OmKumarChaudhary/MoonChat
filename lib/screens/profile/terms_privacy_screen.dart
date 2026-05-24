@@ -1,10 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:moonchat/screens/profile/legal_document_screen.dart';
 
 /// Hub screen â€” lets user choose Privacy Policy or Terms of Service.
 /// Both documents are fetched live from Firestore (managed by admin CRUD panel).
 class TermsPrivacyScreen extends StatelessWidget {
-  const TermsPrivacyScreen({Key? key}) : super(key: key);
+  const TermsPrivacyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +159,7 @@ class TermsPrivacyScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.12),
+                color: iconColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: iconColor, size: 24),

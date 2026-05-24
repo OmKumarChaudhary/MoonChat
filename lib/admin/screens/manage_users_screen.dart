@@ -209,7 +209,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     color: const Color(0xFF1D1D2C),
                     borderRadius: BorderRadius.circular(14),
                     border: isAdmin
-                        ? Border.all(color: Colors.red.withOpacity(0.5), width: 1)
+                        ? Border.all(color: Colors.red.withValues(alpha: 0.5), width: 1)
                         : null,
                   ),
                   child: Row(
@@ -243,7 +243,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
-                                      color: Colors.red.withOpacity(0.2),
+                                      color: Colors.red.withValues(alpha: 0.2),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: const Text('Admin', style: TextStyle(color: Colors.red, fontSize: 10)),
@@ -261,7 +261,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: disabled ? Colors.red.withOpacity(0.15) : Colors.green.withOpacity(0.15),
+                          color: disabled ? Colors.red.withValues(alpha: 0.15) : Colors.green.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
