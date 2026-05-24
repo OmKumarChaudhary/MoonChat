@@ -84,3 +84,8 @@ client_secret.json
 client_secret_*.json
 local_settings.py
 secrets.py
+
+# Firebase / Google Service Configuration
+**/google-services.json
+firebase.json
+
